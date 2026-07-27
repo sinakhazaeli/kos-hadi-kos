@@ -3,36 +3,36 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#102d42">
+<meta name="theme-color" content="#102f46">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Koş Hadi Koş!</title>
 <style>
-:root{--navy:#102d42;--gold:#ffbd2e;--cream:#fff8e6}
+:root{--navy:#102f46;--gold:#ffc43d;--cream:#fff8e9}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#7ed0f3;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;touch-action:none}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#78c9ef;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;touch-action:none}
 body{position:fixed;inset:0}
 canvas{display:block;width:100vw;height:100vh}
 button{font:inherit}
 #hud{position:fixed;z-index:8;top:max(10px,env(safe-area-inset-top));left:10px;right:10px;display:flex;justify-content:space-between;pointer-events:none}
-.pill{background:rgba(16,45,66,.9);color:#fff;padding:9px 12px;border-radius:18px;font-weight:900;box-shadow:0 5px 16px rgba(0,0,0,.22);backdrop-filter:blur(10px)}
-#hudBtns{display:flex;gap:7px;pointer-events:auto}
-.icon{width:43px;height:43px;border:0;border-radius:14px;background:rgba(255,255,255,.96);box-shadow:0 4px 14px rgba(0,0,0,.2);font-size:20px}
+.pill{background:rgba(16,47,70,.91);color:white;padding:9px 12px;border-radius:18px;font-weight:900;box-shadow:0 5px 16px rgba(0,0,0,.22);backdrop-filter:blur(10px)}
+#buttons{display:flex;gap:7px;pointer-events:auto}
+.icon{width:43px;height:43px;border:0;border-radius:14px;background:rgba(255,255,255,.96);font-size:20px;box-shadow:0 4px 14px rgba(0,0,0,.2)}
 #center{position:fixed;inset:0;z-index:7;display:flex;align-items:center;justify-content:center;padding:22px;pointer-events:none}
-.card{width:min(400px,94vw);background:rgba(255,248,230,.97);border-radius:30px;padding:24px;text-align:center;box-shadow:0 20px 70px rgba(0,0,0,.32);pointer-events:auto}
+.card{width:min(410px,94vw);background:rgba(255,248,233,.97);border-radius:31px;padding:24px;text-align:center;box-shadow:0 22px 75px rgba(0,0,0,.34);pointer-events:auto;border:1px solid rgba(255,255,255,.8)}
 .hidden{display:none!important}
-.title{font-size:34px;font-weight:1000;line-height:1;color:var(--navy);letter-spacing:-1px}
-.sub{color:#547084;font-weight:700;margin:8px 0 14px}
-.big{width:100%;border:0;border-radius:18px;padding:15px;font-weight:1000;font-size:19px;background:var(--gold);color:#3a2700;box-shadow:0 7px 0 #c78900;margin-top:9px}
-.big:active{transform:translateY(3px);box-shadow:0 4px 0 #c78900}
+.title{font-size:35px;font-weight:1000;line-height:1;color:var(--navy);letter-spacing:-1px}
+.sub{color:#506d80;font-weight:700;margin:8px 0 14px}
+.big{width:100%;border:0;border-radius:18px;padding:15px;font-weight:1000;font-size:19px;background:var(--gold);color:#3a2700;box-shadow:0 7px 0 #c88b00;margin-top:9px}
+.big:active{transform:translateY(3px);box-shadow:0 4px 0 #c88b00}
 .row{display:flex;gap:9px;margin-top:10px}
-.small{flex:1;border:0;border-radius:15px;padding:12px 8px;background:#e9f1f5;color:var(--navy);font-weight:900}
+.small{flex:1;border:0;border-radius:15px;padding:12px 8px;background:#eaf2f6;color:var(--navy);font-weight:900}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
 .stat{background:#edf4f7;border-radius:15px;padding:10px 5px;color:var(--navy);font-weight:900}
 .stat b{display:block;font-size:22px}
-#tip{position:fixed;z-index:6;bottom:calc(18px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:rgba(16,45,66,.9);color:#fff;padding:10px 15px;border-radius:20px;font-weight:900;white-space:nowrap;box-shadow:0 5px 15px rgba(0,0,0,.22)}
+#tip{position:fixed;z-index:6;bottom:calc(18px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:rgba(16,47,70,.92);color:white;padding:10px 15px;border-radius:20px;font-weight:900;white-space:nowrap;box-shadow:0 5px 16px rgba(0,0,0,.22)}
 #toast{position:fixed;z-index:20;top:88px;left:50%;transform:translateX(-50%) translateY(-8px);opacity:0;background:#fff;color:var(--navy);padding:10px 15px;border-radius:17px;font-weight:1000;box-shadow:0 8px 25px rgba(0,0,0,.25);transition:.2s}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-#flash{position:fixed;inset:0;z-index:15;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:.22s;background:radial-gradient(circle,rgba(255,214,57,.45),transparent 58%)}
+#flash{position:fixed;inset:0;z-index:15;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:.22s;background:radial-gradient(circle,rgba(255,222,86,.44),transparent 58%)}
 #flash.show{opacity:1}
 #flashText{font-size:44px;font-weight:1000;color:#fff;text-shadow:0 5px 18px #6b4700}
 .badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#dff4ff;color:#16577a;font-size:13px;font-weight:900;margin-bottom:10px}
@@ -40,57 +40,46 @@ button{font:inherit}
 </head>
 <body>
 <div id="hud">
-  <div class="pill"><span id="scoreLabel">Skor</span> <span id="score">0</span> · 🪙 <span id="runCoins">0</span> · x<span id="mult">1</span></div>
-  <div id="hudBtns">
-    <button class="icon" id="soundBtn">🔊</button>
-    <button class="icon" id="langBtn">🌐</button>
-    <button class="icon" id="pauseBtn">⏸️</button>
-  </div>
+ <div class="pill"><span id="scoreLabel">Skor</span> <span id="score">0</span> · 🪙 <span id="runCoins">0</span> · x<span id="mult">1</span></div>
+ <div id="buttons">
+  <button class="icon" id="soundBtn">🔊</button>
+  <button class="icon" id="langBtn">🌐</button>
+  <button class="icon" id="pauseBtn">⏸️</button>
+ </div>
 </div>
 
 <div id="center">
-  <div class="card" id="menu">
-    <div class="badge">ISTANBUL RUNNER</div>
-    <div style="font-size:58px">🏃‍♂️🌉</div>
-    <div class="title">KOŞ HADİ KOŞ!</div>
-    <div class="sub" id="subtitle">İstanbul’un kalbinde kaç, topla, yüksel!</div>
-    <div class="grid">
-      <div class="stat">🏆<b id="best">0</b><span id="bestTxt">En iyi</span></div>
-      <div class="stat">🪙<b id="wallet">0</b><span id="coinTxt">Altın</span></div>
-      <div class="stat">🎁<b id="gifts">0</b><span id="giftTxt">Hediye</span></div>
-    </div>
-    <button class="big" id="playBtn">OYNA</button>
-    <div class="row">
-      <button class="small" id="dailyBtn">🎁 Günlük Ödül</button>
-      <button class="small" id="howBtn">Nasıl Oynanır?</button>
-    </div>
-    <div class="row">
-      <button class="small" id="shareBtn">📤 Arkadaşına Gönder</button>
-      <button class="small" id="missionBtn">🎯 Görev</button>
-    </div>
+ <div class="card" id="menu">
+  <div class="badge">ISTANBUL RUNNER</div>
+  <div style="font-size:62px">🏃‍♂️🌉</div>
+  <div class="title">KOŞ HADİ KOŞ!</div>
+  <div class="sub" id="subtitle">İstanbul’un kalbinde koş!</div>
+  <div class="grid">
+   <div class="stat">🏆<b id="best">0</b><span id="bestTxt">En iyi</span></div>
+   <div class="stat">🪙<b id="wallet">0</b><span id="coinTxt">Altın</span></div>
+   <div class="stat">🎁<b id="gifts">0</b><span id="giftTxt">Hediye</span></div>
   </div>
+  <button class="big" id="playBtn">OYNA</button>
+  <div class="row"><button class="small" id="dailyBtn">🎁 Günlük Ödül</button><button class="small" id="howBtn">Nasıl Oynanır?</button></div>
+  <div class="row"><button class="small" id="shareBtn">📤 Arkadaşına Gönder</button><button class="small" id="missionBtn">🎯 Görev</button></div>
+ </div>
 
-  <div class="card hidden" id="pauseCard">
-    <div style="font-size:50px">⏸️</div>
-    <div class="title" id="pauseTitle">DURAKLATILDI</div>
-    <button class="big" id="resumeBtn">DEVAM ET</button>
-  </div>
+ <div class="card hidden" id="pauseCard">
+  <div style="font-size:52px">⏸️</div><div class="title" id="pauseTitle">DURAKLATILDI</div>
+  <button class="big" id="resumeBtn">DEVAM ET</button>
+ </div>
 
-  <div class="card hidden" id="overCard">
-    <div style="font-size:54px">😵‍💫</div>
-    <div class="title" id="overTitle">EYVAH!</div>
-    <div class="sub"><span id="finalTxt">Skorun</span>: <b id="finalScore">0</b></div>
-    <div class="grid">
-      <div class="stat">🪙<b id="earned">0</b><span id="earnedTxt">Kazandın</span></div>
-      <div class="stat">🔥<b id="maxMult">1</b><span id="comboTxt">Kombo</span></div>
-      <div class="stat">🎁<b id="giftEarned">0</b><span id="giftEarnedTxt">Hediye</span></div>
-    </div>
-    <button class="big" id="restartBtn">TEKRAR OYNA</button>
-    <div class="row">
-      <button class="small" id="shareScoreBtn">📤 Skoru Paylaş</button>
-      <button class="small" id="homeBtn">ANA MENÜ</button>
-    </div>
+ <div class="card hidden" id="overCard">
+  <div style="font-size:56px">😵‍💫</div><div class="title" id="overTitle">EYVAH!</div>
+  <div class="sub"><span id="finalTxt">Skorun</span>: <b id="finalScore">0</b></div>
+  <div class="grid">
+   <div class="stat">🪙<b id="earned">0</b><span id="earnedTxt">Kazandın</span></div>
+   <div class="stat">🔥<b id="maxMult">1</b><span id="comboTxt">Kombo</span></div>
+   <div class="stat">🎁<b id="giftEarned">0</b><span id="giftEarnedTxt">Hediye</span></div>
   </div>
+  <button class="big" id="restartBtn">TEKRAR OYNA</button>
+  <div class="row"><button class="small" id="shareScoreBtn">📤 Skoru Paylaş</button><button class="small" id="homeBtn">ANA MENÜ</button></div>
+ </div>
 </div>
 
 <div id="tip">Kaydır: sağ / sol · Yukarı: zıpla · Aşağı: kay</div>
@@ -102,36 +91,33 @@ button{font:inherit}
 const c=document.getElementById('game'),ctx=c.getContext('2d'),$=id=>document.getElementById(id);
 const UI={score:$('score'),runCoins:$('runCoins'),mult:$('mult'),scoreLabel:$('scoreLabel'),menu:$('menu'),pause:$('pauseCard'),over:$('overCard'),
 best:$('best'),wallet:$('wallet'),gifts:$('gifts'),subtitle:$('subtitle'),bestTxt:$('bestTxt'),coinTxt:$('coinTxt'),giftTxt:$('giftTxt'),
-playBtn:$('playBtn'),dailyBtn:$('dailyBtn'),howBtn:$('howBtn'),shareBtn:$('shareBtn'),missionBtn:$('missionBtn'),pauseTitle:$('pauseTitle'),
-resumeBtn:$('resumeBtn'),overTitle:$('overTitle'),finalTxt:$('finalTxt'),finalScore:$('finalScore'),earned:$('earned'),earnedTxt:$('earnedTxt'),
-maxMult:$('maxMult'),comboTxt:$('comboTxt'),giftEarned:$('giftEarned'),giftEarnedTxt:$('giftEarnedTxt'),restartBtn:$('restartBtn'),
-shareScoreBtn:$('shareScoreBtn'),homeBtn:$('homeBtn'),soundBtn:$('soundBtn'),langBtn:$('langBtn'),pauseBtn:$('pauseBtn'),
+playBtn:$('playBtn'),dailyBtn:$('dailyBtn'),howBtn:$('howBtn'),shareBtn:$('shareBtn'),missionBtn:$('missionBtn'),
+pauseTitle:$('pauseTitle'),resumeBtn:$('resumeBtn'),overTitle:$('overTitle'),finalTxt:$('finalTxt'),finalScore:$('finalScore'),
+earned:$('earned'),earnedTxt:$('earnedTxt'),maxMult:$('maxMult'),comboTxt:$('comboTxt'),giftEarned:$('giftEarned'),giftEarnedTxt:$('giftEarnedTxt'),
+restartBtn:$('restartBtn'),shareScoreBtn:$('shareScoreBtn'),homeBtn:$('homeBtn'),soundBtn:$('soundBtn'),langBtn:$('langBtn'),pauseBtn:$('pauseBtn'),
 tip:$('tip'),toast:$('toast'),flash:$('flash'),flashText:$('flashText')};
 
 const TXT={
-tr:{score:'Skor',subtitle:'İstanbul’un kalbinde kaç, topla, yüksel!',best:'En iyi',coins:'Altın',gift:'Hediye',play:'OYNA',daily:'🎁 Günlük Ödül',
+tr:{score:'Skor',subtitle:'İstanbul’un kalbinde koş!',best:'En iyi',coins:'Altın',gift:'Hediye',play:'OYNA',daily:'🎁 Günlük Ödül',
 how:'Nasıl Oynanır?',share:'📤 Arkadaşına Gönder',mission:'🎯 Görev',paused:'DURAKLATILDI',resume:'DEVAM ET',over:'EYVAH!',
 final:'Skorun',earned:'Kazandın',combo:'Kombo',again:'TEKRAR OYNA',shareScore:'📤 Skoru Paylaş',home:'ANA MENÜ',
 tip:'Kaydır: sağ / sol · Yukarı: zıpla · Aşağı: kay',
-howmsg:'Sağa veya sola kaydırarak şerit değiştir. Yukarı kaydırarak zıpla, aşağı kaydırarak engellerin altından geç. Altınları, çayı ve nazar boncuklarını topla!',
-dailyok:'Günlük ödül: +30 altın!',dailywait:'Bugünkü ödülünü zaten aldın!',missionText:'Bugünün görevi: 20 altın topla ve 12 puana ulaş.',
-shareText:'Koş Hadi Koş! oyununu dene — İstanbul sokaklarında kaçıyorum!',
-giftPop:'Sürpriz hediye!'},
-en:{score:'Score',subtitle:'Run, collect and rise through the heart of Istanbul!',best:'Best',coins:'Coins',gift:'Gifts',play:'PLAY',daily:'🎁 Daily Reward',
+howmsg:'Sağa veya sola kaydırarak şerit değiştir. Yukarı kaydırarak zıpla. Aşağı kaydırarak kay. İlk 8 saniye güvenli alıştırma bölümüdür.',
+dailyok:'Günlük ödül: +30 altın!',dailywait:'Bugünkü ödülünü zaten aldın!',missionText:'Bugünün görevi: 20 altın topla ve 15 puana ulaş.',
+shareText:'Koş Hadi Koş! oyununu dene — İstanbul’da kaçıyorum!'},
+en:{score:'Score',subtitle:'Run through the heart of Istanbul!',best:'Best',coins:'Coins',gift:'Gifts',play:'PLAY',daily:'🎁 Daily Reward',
 how:'How to Play',share:'📤 Share with Friends',mission:'🎯 Mission',paused:'PAUSED',resume:'RESUME',over:'OH NO!',
 final:'Your Score',earned:'Earned',combo:'Combo',again:'PLAY AGAIN',shareScore:'📤 Share Score',home:'MAIN MENU',
 tip:'Swipe: left / right · Up: jump · Down: slide',
-howmsg:'Swipe left or right to change lanes. Swipe up to jump and down to slide under obstacles. Collect coins, tea and evil-eye charms!',
-dailyok:'Daily reward: +30 coins!',dailywait:'You already collected today’s reward!',missionText:'Today’s mission: collect 20 coins and reach score 12.',
-shareText:'Try Koş Hadi Koş! — I’m running through the streets of Istanbul!',
-giftPop:'Surprise gift!'}};
+howmsg:'Swipe left or right to change lanes. Swipe up to jump and down to slide. The first 8 seconds are a safe practice section.',
+dailyok:'Daily reward: +30 coins!',dailywait:'You already collected today’s reward!',missionText:'Today’s mission: collect 20 coins and reach score 15.',
+shareText:'Try Koş Hadi Koş! — I’m running through Istanbul!'}};
 
 let lang=localStorage.getItem('khk_lang')||'tr',soundOn=localStorage.getItem('khk_sound')!=='off';
 let best=+localStorage.getItem('khk_best')||0,wallet=+localStorage.getItem('khk_wallet')||0,gifts=+localStorage.getItem('khk_gifts')||0;
-let state='menu',score=0,coins=0,mult=1,maxMult=1,speed=.010,elapsed=0,last=performance.now(),audioCtx,giftEarned=0;
-let lane=1,targetLane=1,jumpY=0,jumpV=0,sliding=0,shake=0;
-let objects=[],particles=[],swipeStart=null;
-const lanes=[-1,0,1];
+let state='menu',score=0,coins=0,mult=1,maxMult=1,elapsed=0,last=performance.now(),audioCtx,giftEarned=0;
+let lane=1,targetLane=1,jumpY=0,jumpV=0,sliding=0,objects=[],particles=[],swipeStart=null,shake=0;
+let spawnTimer=0;
 
 function resize(){const d=Math.min(devicePixelRatio||1,2);c.width=innerWidth*d;c.height=innerHeight*d;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';ctx.setTransform(d,0,0,d,0,0)}
 addEventListener('resize',resize);resize();
@@ -151,7 +137,7 @@ function tone(freq,d=.08,type='sine',vol=.05,slide=0){
  if(slide)o.frequency.linearRampToValueAtTime(freq+slide,audioCtx.currentTime+d);g.gain.setValueAtTime(vol,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+d);
  o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+d);
 }
-function sfx(n){if(n==='move')tone(340,.04,'square',.03,70);if(n==='jump')tone(440,.08,'square',.04,220);if(n==='slide')tone(260,.08,'triangle',.04,-70);
+function sfx(n){if(n==='move')tone(330,.04,'square',.03,60);if(n==='jump')tone(440,.08,'square',.04,220);if(n==='slide')tone(260,.08,'triangle',.04,-70);
 if(n==='coin')tone(850,.05,'sine',.05,180);if(n==='charm'){tone(560,.12,'triangle',.06,350);setTimeout(()=>tone(880,.1,'sine',.04,120),80)}
 if(n==='hit'){tone(180,.3,'sawtooth',.06,-100);navigator.vibrate?.([80,50,100])}if(n==='gift'){tone(540,.08,'square',.05,180);setTimeout(()=>tone(760,.09,'square',.05,180),80);setTimeout(()=>tone(980,.12,'square',.05,180),160)}}
 function toast(m){UI.toast.textContent=m;UI.toast.classList.add('show');clearTimeout(toast.tm);toast.tm=setTimeout(()=>UI.toast.classList.remove('show'),1900)}
@@ -159,22 +145,15 @@ function flash(m){UI.flashText.textContent=m;UI.flash.classList.add('show');setT
 function hideCards(){UI.menu.classList.add('hidden');UI.pause.classList.add('hidden');UI.over.classList.add('hidden')}
 function showCard(x){hideCards();x.classList.remove('hidden')}
 
-function spawnRow(z=1.05){
- const safe=Math.floor(Math.random()*3),hard=Math.random()<.38;
- for(let i=0;i<3;i++){
-  if(i!==safe && (hard||Math.random()<.58))objects.push({kind:Math.random()<.5?'barrier':'cart',lane:i,z,hit:false});
- }
- const pickLane=Math.floor(Math.random()*3);
- for(let k=0;k<5;k++)objects.push({kind:Math.random()<.12?'charm':'coin',lane:pickLane,z:z+.08+k*.065,taken:false});
- if(Math.random()<.18)objects.push({kind:'tea',lane:safe,z:z+.18,taken:false});
-}
 function start(){
- hideCards();state='playing';score=0;coins=0;mult=1;maxMult=1;speed=.010;elapsed=0;lane=1;targetLane=1;jumpY=0;jumpV=0;sliding=0;objects=[];particles=[];giftEarned=0;
+ hideCards();state='playing';score=0;coins=0;mult=1;maxMult=1;elapsed=0;lane=1;targetLane=1;jumpY=0;jumpV=0;sliding=0;objects=[];particles=[];giftEarned=0;spawnTimer=0;
  UI.score.textContent=0;UI.runCoins.textContent=0;UI.mult.textContent=1;UI.tip.classList.remove('hidden');
- spawnRow(.95);spawnRow(1.45);tone(520,.07,'square',.04,170);
+ // safe coin-only opening
+ for(let k=0;k<10;k++)objects.push({kind:'coin',lane:1,z:.45+k*.07,taken:false});
+ tone(520,.07,'square',.04,170);
 }
 function end(){
- state='over';sfx('hit');shake=12;wallet+=coins;localStorage.setItem('khk_wallet',wallet);
+ if(state!=='playing')return;state='over';sfx('hit');shake=12;wallet+=coins;localStorage.setItem('khk_wallet',wallet);
  if(score>best){best=score;localStorage.setItem('khk_best',best)}
  if(score>=18&&Math.random()<.55){giftEarned=1;gifts++;localStorage.setItem('khk_gifts',gifts);sfx('gift')}
  UI.finalScore.textContent=score;UI.earned.textContent=coins;UI.maxMult.textContent=maxMult;UI.giftEarned.textContent=giftEarned;UI.wallet.textContent=wallet;UI.best.textContent=best;UI.gifts.textContent=gifts;
@@ -182,115 +161,144 @@ function end(){
 }
 function pause(){if(state==='playing'){state='paused';showCard(UI.pause);UI.tip.classList.add('hidden')}else if(state==='paused'){state='playing';hideCards();UI.tip.classList.remove('hidden')}}
 function move(d){if(state!=='playing')return;targetLane=Math.max(0,Math.min(2,targetLane+d));sfx('move')}
-function jump(){if(state==='playing'&&jumpY===0){jumpV=.028;sfx('jump')}}
-function slide(){if(state==='playing'&&jumpY===0){sliding=.65;sfx('slide')}}
+function jump(){if(state==='playing'&&jumpY===0){jumpV=.82;sfx('jump')}}
+function slide(){if(state==='playing'&&jumpY===0){sliding=.68;sfx('slide')}}
+
+function spawnRow(){
+ const z=1.05, safe=Math.floor(Math.random()*3), difficulty=Math.min(.8,.25+elapsed/70);
+ for(let i=0;i<3;i++){
+   if(i!==safe && Math.random()<difficulty)objects.push({kind:Math.random()<.58?'barrier':'cart',lane:i,z,hit:false,scored:false});
+ }
+ const coinLane=Math.random()<.7?safe:Math.floor(Math.random()*3);
+ for(let k=0;k<5;k++)objects.push({kind:Math.random()<.1?'charm':'coin',lane:coinLane,z:z+.10+k*.075,taken:false});
+ if(Math.random()<.2)objects.push({kind:'tea',lane:safe,z:z+.24,taken:false});
+}
 
 function project(l,z,W,H){
- const horizon=H*.28,ground=H*.93,depth=Math.max(.01,1-z),spread=W*(.09+.43*depth),x=W/2+(l-1)*spread,y=horizon+(ground-horizon)*depth;
- return{x,y,scale:.24+1.05*depth};
+ const horizon=H*.27,ground=H*.94,depth=Math.max(0,1-z),spread=W*(.075+.43*depth),x=W/2+(l-1)*spread,y=horizon+(ground-horizon)*depth;
+ return{x,y,scale:.20+1.12*depth};
 }
 function rr(x,y,w,h,r,col){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=col;ctx.fill()}
 function line(x1,y1,x2,y2,w,col){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.lineWidth=w;ctx.strokeStyle=col;ctx.stroke()}
 function poly(points,col){ctx.beginPath();ctx.moveTo(points[0][0],points[0][1]);for(let i=1;i<points.length;i++)ctx.lineTo(points[i][0],points[i][1]);ctx.closePath();ctx.fillStyle=col;ctx.fill()}
 
-function bg(W,H){
- const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#69c7f2');g.addColorStop(.48,'#dff7ff');g.addColorStop(1,'#f3c98f');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
- ctx.fillStyle='#ffd55c';ctx.beginPath();ctx.arc(W*.82,H*.13,34,0,7);ctx.fill();
- // Bosphorus and city
- ctx.fillStyle='#72c7e8';ctx.fillRect(0,H*.26,W,H*.22);
- ctx.fillStyle='#9b8778';
- // Hagia Sophia / mosque
- ctx.fillRect(28,H*.27,135,H*.21);ctx.beginPath();ctx.arc(95,H*.27,68,Math.PI,0);ctx.fill();
- ctx.fillRect(15,H*.18,16,H*.3);ctx.fillRect(165,H*.2,15,H*.28);
- poly([[23,H*.13],[7,H*.18],[39,H*.18]],'#9b8778');poly([[172,H*.15],[157,H*.2],[187,H*.2]],'#9b8778');
+function drawSky(W,H){
+ let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#62c3ef');g.addColorStop(.42,'#cceeff');g.addColorStop(.78,'#f8d6a4');g.addColorStop(1,'#e9ad67');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ ctx.fillStyle='rgba(255,239,174,.92)';ctx.beginPath();ctx.arc(W*.82,H*.13,39,0,7);ctx.fill();
+ // soft clouds
+ ctx.fillStyle='rgba(255,255,255,.68)';
+ [[.18,.13,1],[.55,.09,.7],[.75,.2,.8]].forEach(a=>{let x=W*a[0],y=H*a[1],s=a[2];ctx.beginPath();ctx.arc(x,y,24*s,0,7);ctx.arc(x+25*s,y-8*s,20*s,0,7);ctx.arc(x+47*s,y,25*s,0,7);ctx.fill()});
+ // water
+ ctx.fillStyle='#69bddf';ctx.fillRect(0,H*.25,W,H*.23);
+ for(let i=0;i<10;i++){ctx.fillStyle=`rgba(255,255,255,${.08+i*.012})`;ctx.fillRect(0,H*(.29+i*.017),W,2)}
+ // silhouette city
+ ctx.fillStyle='#8e7c70';
+ ctx.fillRect(20,H*.28,150,H*.20);ctx.beginPath();ctx.arc(95,H*.28,72,Math.PI,0);ctx.fill();
+ ctx.fillRect(12,H*.16,15,H*.32);ctx.fillRect(172,H*.18,15,H*.30);
+ poly([[19,H*.12],[5,H*.16],[33,H*.16]],'#8e7c70');poly([[179,H*.14],[165,H*.18],[193,H*.18]],'#8e7c70');
+ // domes
+ for(let i=0;i<3;i++){ctx.beginPath();ctx.arc(54+i*42,H*.31,20,Math.PI,0);ctx.fill()}
  // Galata tower
- ctx.fillRect(W-120,H*.18,46,H*.3);poly([[W-135,H*.18],[W-97,H*.11],[W-60,H*.18]],'#887568');
- // bridge
- line(W*.33,H*.23,W*.75,H*.23,4,'#e9edf0');line(W*.37,H*.15,W*.37,H*.31,7,'#dce2e5');line(W*.71,H*.15,W*.71,H*.31,7,'#dce2e5');
- for(let i=0;i<8;i++)line(W*(.39+i*.04),H*.23,W*(.39+i*.04),H*.31,2,'rgba(240,245,247,.8)');
- // road perspective
- const h=H*.28,gnd=H*.95;
- poly([[W*.44,h],[W*.56,h],[W*.98,gnd],[W*.02,gnd]],'#4b5560');
- // sidewalks
- poly([[W*.39,h],[W*.44,h],[W*.02,gnd],[0,gnd]],'#caa272');poly([[W*.56,h],[W*.61,h],[W,gnd],[W*.98,gnd]],'#caa272');
- // lane lines
- for(let laneLine of [0.485,0.515]){
-   for(let k=0;k<10;k++){let z=((k/10+elapsed*.35)%1),p1=project(laneLine<.5?1.33:1.67,z,W,H),p2=project(laneLine<.5?1.33:1.67,z+.05,W,H);line(p1.x,p1.y,p2.x,p2.y,2+p1.scale*2,'rgba(255,255,255,.8)')}
+ ctx.fillRect(W-122,H*.18,48,H*.30);poly([[W-137,H*.18],[W-98,H*.105],[W-59,H*.18]],'#7c6a60');
+ // Bosphorus bridge
+ line(W*.33,H*.22,W*.75,H*.22,5,'#f4f6f7');line(W*.37,H*.14,W*.37,H*.31,8,'#e3e8eb');line(W*.71,H*.14,W*.71,H*.31,8,'#e3e8eb');
+ for(let i=0;i<9;i++)line(W*(.39+i*.04),H*.22,W*(.39+i*.04),H*.31,2,'rgba(240,245,247,.82)');
+}
+function drawRoad(W,H){
+ const h=H*.27,g=H*.96;
+ poly([[W*.43,h],[W*.57,h],[W*.985,g],[W*.015,g]],'#3f4953');
+ poly([[W*.39,h],[W*.43,h],[W*.015,g],[0,g]],'#c89a67');
+ poly([[W*.57,h],[W*.61,h],[W,g],[W*.985,g]],'#c89a67');
+ // road edge glow
+ line(W*.43,h,W*.015,g,3,'rgba(255,255,255,.32)');line(W*.57,h,W*.985,g,3,'rgba(255,255,255,.32)');
+ // lane dashes
+ for(let li of [1.33,1.67]){
+  for(let k=0;k<11;k++){
+   let z=(k/11+elapsed*.11)%1,p1=project(li,z,W,H),p2=project(li,Math.min(1,z+.045),W,H);
+   line(p1.x,p1.y,p2.x,p2.y,2+p1.scale*2,'rgba(255,255,255,.8)');
+  }
+ }
+ // roadside lamps
+ for(let k=0;k<7;k++){
+  let z=(k/7+elapsed*.055)%1,pL=project(-.35,z,W,H),pR=project(3.35,z,W,H);
+  [pL,pR].forEach(p=>{line(p.x,p.y,p.x,p.y-45*p.scale,3*p.scale,'#31414d');ctx.fillStyle='#ffd86a';ctx.beginPath();ctx.arc(p.x,p.y-48*p.scale,5*p.scale,0,7);ctx.fill()})
  }
 }
 function drawObj(o,W,H){
  const p=project(o.lane,o.z,W,H),s=p.scale;
- if(o.kind==='coin'){ctx.fillStyle='#ffd744';ctx.beginPath();ctx.arc(p.x,p.y,9*s,0,7);ctx.fill();ctx.strokeStyle='#d69b00';ctx.lineWidth=2*s;ctx.stroke();ctx.fillStyle='#9a6700';ctx.font=`${12*s}px Arial`;ctx.fillText('₺',p.x-4*s,p.y+4*s)}
- else if(o.kind==='charm'){ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(p.x,p.y,11*s,0,7);ctx.fill();ctx.strokeStyle='#1d6bc1';ctx.lineWidth=4*s;ctx.stroke();ctx.fillStyle='#1d6bc1';ctx.beginPath();ctx.arc(p.x,p.y,5*s,0,7);ctx.fill();ctx.fillStyle='#111';ctx.beginPath();ctx.arc(p.x,p.y,2*s,0,7);ctx.fill()}
- else if(o.kind==='tea'){ctx.save();ctx.translate(p.x,p.y);ctx.scale(s,s);ctx.fillStyle='#82491f';ctx.beginPath();ctx.moveTo(-10,-12);ctx.lineTo(10,-12);ctx.lineTo(7,14);ctx.lineTo(-7,14);ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.strokeRect(8,-8,8,10);ctx.restore()}
- else if(o.kind==='barrier'){ctx.save();ctx.translate(p.x,p.y);ctx.scale(s,s);rr(-22,-20,44,28,5,'#e34a3d');ctx.fillStyle='#fff';ctx.fillRect(-16,-10,32,6);ctx.fillStyle='#333';ctx.fillRect(-18,8,5,10);ctx.fillRect(13,8,5,10);ctx.restore()}
- else if(o.kind==='cart'){ctx.save();ctx.translate(p.x,p.y);ctx.scale(s,s);rr(-28,-22,56,30,6,'#d73f37');rr(-22,-31,44,13,5,'#f6ca45');ctx.fillStyle='#222';ctx.beginPath();ctx.arc(-16,10,6,0,7);ctx.arc(16,10,6,0,7);ctx.fill();ctx.restore()}
+ if(o.kind==='coin'){
+   let rg=ctx.createRadialGradient(p.x-3*s,p.y-3*s,1,p.x,p.y,11*s);rg.addColorStop(0,'#fff4a6');rg.addColorStop(.4,'#ffd84c');rg.addColorStop(1,'#c98b00');ctx.fillStyle=rg;ctx.beginPath();ctx.arc(p.x,p.y,11*s,0,7);ctx.fill();ctx.strokeStyle='#a86f00';ctx.lineWidth=2*s;ctx.stroke();ctx.fillStyle='#8a5a00';ctx.font=`bold ${12*s}px Arial`;ctx.fillText('₺',p.x-4*s,p.y+4*s)
+ } else if(o.kind==='charm'){
+   ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(p.x,p.y,13*s,0,7);ctx.fill();ctx.strokeStyle='#1b69bd';ctx.lineWidth=4*s;ctx.stroke();ctx.fillStyle='#1b69bd';ctx.beginPath();ctx.arc(p.x,p.y,6*s,0,7);ctx.fill();ctx.fillStyle='#111';ctx.beginPath();ctx.arc(p.x,p.y,2.5*s,0,7);ctx.fill()
+ } else if(o.kind==='tea'){
+   ctx.save();ctx.translate(p.x,p.y);ctx.scale(s,s);ctx.fillStyle='rgba(255,255,255,.92)';ctx.beginPath();ctx.moveTo(-12,-16);ctx.lineTo(12,-16);ctx.lineTo(8,15);ctx.lineTo(-8,15);ctx.fill();ctx.fillStyle='#8a3f16';ctx.beginPath();ctx.moveTo(-9,-11);ctx.lineTo(9,-11);ctx.lineTo(6,12);ctx.lineTo(-6,12);ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.strokeRect(9,-9,9,12);ctx.restore()
+ } else if(o.kind==='barrier'){
+   ctx.save();ctx.translate(p.x,p.y);ctx.scale(s,s);rr(-24,-25,48,32,6,'#e14a3c');ctx.fillStyle='#fff';ctx.fillRect(-18,-14,36,7);ctx.fillStyle='#31383d';ctx.fillRect(-19,6,6,12);ctx.fillRect(13,6,6,12);ctx.restore()
+ } else if(o.kind==='cart'){
+   ctx.save();ctx.translate(p.x,p.y);ctx.scale(s,s);rr(-31,-26,62,34,7,'#cf3933');rr(-24,-38,48,16,6,'#f5c83f');
+   ctx.fillStyle='#9e5e25';for(let i=0;i<4;i++){ctx.beginPath();ctx.arc(-15+i*10,-31,5,0,7);ctx.fill()}
+   ctx.fillStyle='#222';ctx.beginPath();ctx.arc(-17,12,7,0,7);ctx.arc(17,12,7,0,7);ctx.fill();ctx.restore()
+ }
 }
-function runner(W,H){
- const base=project(lane,0.02,W,H),x=base.x,y=H*.81-jumpY*H*.55,slideFactor=sliding>0?.58:1,s=1.05;
- ctx.save();ctx.translate(x,y);ctx.scale(s,s*slideFactor);
- ctx.fillStyle='rgba(0,0,0,.2)';ctx.beginPath();ctx.ellipse(0,50,27,8,0,0,7);ctx.fill();
- // legs
- const sw=Math.sin(elapsed*16)*10;line(-8,28,-12+sw,48,9,'#17364b');line(9,28,13-sw,48,9,'#17364b');
- // torso
- rr(-18,-15,36,48,11,'#ef6b3c');rr(-12,-10,24,35,8,'#f59d45');
- // arms
- line(-15,-5,-30+sw*.3,16,8,'#efbe94');line(15,-5,30-sw*.3,13,8,'#efbe94');
- // head
- ctx.fillStyle='#efbe94';ctx.beginPath();ctx.arc(0,-31,15,0,7);ctx.fill();
- // hair and cap
- ctx.fillStyle='#2c2c2c';ctx.beginPath();ctx.arc(0,-35,14,Math.PI,0);ctx.fill();rr(-12,-47,25,8,4,'#b72e2e');
- // face
- ctx.fillStyle='#111';ctx.fillRect(5,-32,2,2);ctx.beginPath();ctx.arc(0,-25,5,0,Math.PI);ctx.fill();
- // scarf
- ctx.fillStyle='#fff';ctx.fillRect(-14,-18,28,5);
- ctx.restore();
+function drawRunner(W,H){
+ const p=project(lane,.03,W,H),x=p.x,y=H*.82-jumpY*H*.40,slideF=sliding>0?.58:1;
+ ctx.save();ctx.translate(x,y);ctx.scale(1.12,1.12*slideF);
+ ctx.fillStyle='rgba(0,0,0,.22)';ctx.beginPath();ctx.ellipse(0,53,29,8,0,0,7);ctx.fill();
+ const sw=Math.sin(elapsed*15)*10;
+ line(-8,29,-14+sw,51,10,'#17364b');line(9,29,15-sw,51,10,'#17364b');
+ rr(-19,-16,38,50,12,'#e95f36');rr(-13,-11,26,37,9,'#f39b42');
+ line(-16,-4,-31+sw*.3,17,8,'#efbe94');line(16,-4,31-sw*.3,14,8,'#efbe94');
+ ctx.fillStyle='#efbe94';ctx.beginPath();ctx.arc(0,-33,16,0,7);ctx.fill();
+ ctx.fillStyle='#2b2b2b';ctx.beginPath();ctx.arc(0,-37,15,Math.PI,0);ctx.fill();rr(-13,-50,27,9,4,'#b92f2f');
+ ctx.fillStyle='#111';ctx.fillRect(6,-34,2,2);ctx.beginPath();ctx.arc(0,-26,5,0,Math.PI);ctx.fill();
+ ctx.fillStyle='#fff';ctx.fillRect(-15,-19,30,5);
+ ctx.restore()
 }
 function drawParticles(){for(const p of particles){ctx.globalAlpha=Math.max(0,p.life/30);ctx.fillStyle=p.col;ctx.fillRect(p.x,p.y,p.s,p.s)}ctx.globalAlpha=1}
 
 function update(dt){
- if(state!=='playing')return;elapsed+=dt/1000;speed=Math.min(.018,.010+score*.00012);
- lane+=(targetLane-lane)*Math.min(1,dt*.018);
- if(jumpY>0||jumpV>0){jumpY+=jumpV*dt;jumpV-=.000085*dt;if(jumpY<=0){jumpY=0;jumpV=0}}
- if(sliding>0)sliding-=dt/1000;
- for(const o of objects)o.z-=speed*dt;
- const farthest=Math.max(0,...objects.map(o=>o.z));if(farthest<1.2){spawnRow(1.5);spawnRow(2.0)}
+ if(state!=='playing')return;
+ const sec=dt/1000;elapsed+=sec;
+ const speed=Math.min(.26,.115+elapsed*.0022); // z units per second, deliberately slow
+ lane+=(targetLane-lane)*Math.min(1,sec*10);
+ if(jumpY>0||jumpV>0){jumpY+=jumpV*sec;jumpV-=1.75*sec;if(jumpY<=0){jumpY=0;jumpV=0}}
+ if(sliding>0)sliding-=sec;
+ spawnTimer-=sec;
+ if(elapsed>8 && spawnTimer<=0){spawnRow();spawnTimer=Math.max(1.65,2.6-elapsed*.012)}
+ for(const o of objects)o.z-=speed*sec;
  for(const o of objects){
-  if((o.kind==='coin'||o.kind==='charm'||o.kind==='tea')&&!o.taken&&o.z<.105&&o.z>.0&&Math.abs(o.lane-lane)<.35){
-   o.taken=true;let val=o.kind==='coin'?1:o.kind==='tea'?3:5;coins+=val*mult;UI.runCoins.textContent=coins;sfx(o.kind==='charm'?'charm':'coin');flash('+'+(val*mult)+' 🪙');
-   const p=project(o.lane,o.z,innerWidth,innerHeight);for(let i=0;i<9;i++)particles.push({x:p.x,y:p.y,vx:(Math.random()-.5)*4,vy:(Math.random()-.5)*4,life:24+Math.random()*12,s:3+Math.random()*3,col:o.kind==='charm'?'#2d78d0':'#ffd744'});
-  }
-  if((o.kind==='barrier'||o.kind==='cart')&&!o.hit&&o.z<.09&&o.z>.0&&Math.abs(o.lane-lane)<.35){
-   const safe=o.kind==='barrier'?jumpY>.13:(sliding>0||jumpY>.16);
-   if(!safe){o.hit=true;end();return}
-  }
-  if(!o.scored&&o.z<0){o.scored=true;score++;if(score%4===0){mult=Math.min(9,mult+1);maxMult=Math.max(maxMult,mult);UI.mult.textContent=mult}UI.score.textContent=score}
+   if((o.kind==='coin'||o.kind==='charm'||o.kind==='tea')&&!o.taken&&o.z<.10&&o.z>-.02&&Math.abs(o.lane-lane)<.43){
+     o.taken=true;const val=o.kind==='coin'?1:o.kind==='tea'?3:5;coins+=val*mult;UI.runCoins.textContent=coins;sfx(o.kind==='charm'?'charm':'coin');flash('+'+(val*mult)+' 🪙');
+     const p=project(o.lane,o.z,innerWidth,innerHeight);for(let i=0;i<10;i++)particles.push({x:p.x,y:p.y,vx:(Math.random()-.5)*4,vy:(Math.random()-.5)*4,life:25+Math.random()*10,s:3+Math.random()*3,col:o.kind==='charm'?'#2f7ed6':'#ffd84c'})
+   }
+   if((o.kind==='barrier'||o.kind==='cart')&&!o.hit&&o.z<.065&&o.z>-.015&&Math.abs(o.lane-lane)<.38){
+     const safe=o.kind==='barrier'?jumpY>.19:(sliding>0||jumpY>.23);
+     if(!safe){o.hit=true;end();return}
+   }
+   if(!o.scored&&o.z<-.02){o.scored=true;score++;if(score%5===0){mult=Math.min(9,mult+1);maxMult=Math.max(maxMult,mult);UI.mult.textContent=mult}UI.score.textContent=score}
  }
- objects=objects.filter(o=>o.z>-.12&&!o.taken);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.08;p.life--});particles=particles.filter(p=>p.life>0)
+ objects=objects.filter(o=>o.z>-.15&&!o.taken);
+ particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.08;p.life--});particles=particles.filter(p=>p.life>0)
 }
 function draw(){
  const W=innerWidth,H=innerHeight;ctx.save();if(shake>0){ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);shake*=.82}
- bg(W,H);objects.slice().sort((a,b)=>b.z-a.z).forEach(o=>drawObj(o,W,H));runner(W,H);drawParticles();ctx.restore()
+ drawSky(W,H);drawRoad(W,H);objects.slice().sort((a,b)=>b.z-a.z).forEach(o=>drawObj(o,W,H));drawRunner(W,H);drawParticles();ctx.restore()
 }
 function loop(now){const dt=Math.min(34,now-last);last=now;update(dt);draw();requestAnimationFrame(loop)}requestAnimationFrame(loop);
 
 function daily(){const d=new Date().toISOString().slice(0,10),last=localStorage.getItem('khk_daily');if(last===d){toast(t('dailywait'));return}localStorage.setItem('khk_daily',d);wallet+=30;localStorage.setItem('khk_wallet',wallet);UI.wallet.textContent=wallet;sfx('gift');flash('+30 🪙');toast(t('dailyok'))}
 async function share(text){try{if(navigator.share)await navigator.share({title:'Koş Hadi Koş!',text,url:location.href});else{await navigator.clipboard.writeText(location.href);toast(lang==='tr'?'Bağlantı kopyalandı!':'Link copied!')}}catch(e){}}
 
-['soundBtn','langBtn','pauseBtn','playBtn','dailyBtn','howBtn','shareBtn','missionBtn','resumeBtn','restartBtn','shareScoreBtn','homeBtn'].forEach(id=>{
- $(id).addEventListener('pointerdown',e=>e.stopPropagation());$(id).addEventListener('click',e=>e.stopPropagation());
-});
+['soundBtn','langBtn','pauseBtn','playBtn','dailyBtn','howBtn','shareBtn','missionBtn','resumeBtn','restartBtn','shareScoreBtn','homeBtn'].forEach(id=>{$(id).addEventListener('pointerdown',e=>e.stopPropagation());$(id).addEventListener('click',e=>e.stopPropagation())});
 UI.soundBtn.onclick=()=>{soundOn=!soundOn;localStorage.setItem('khk_sound',soundOn?'on':'off');refresh();if(soundOn)sfx('coin')};
 UI.langBtn.onclick=()=>{lang=lang==='tr'?'en':'tr';refresh();sfx('coin')};UI.pauseBtn.onclick=pause;UI.playBtn.onclick=start;UI.dailyBtn.onclick=daily;
 UI.howBtn.onclick=()=>toast(t('howmsg'));UI.missionBtn.onclick=()=>toast(t('missionText'));UI.shareBtn.onclick=()=>share(t('shareText'));
 UI.resumeBtn.onclick=pause;UI.restartBtn.onclick=start;UI.shareScoreBtn.onclick=()=>share(`${t('shareText')} ${t('score')}: ${score}`);
 UI.homeBtn.onclick=()=>{state='menu';showCard(UI.menu);UI.tip.classList.add('hidden');refresh()};
 
-document.body.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;swipeStart={x:e.clientX,y:e.clientY,time:performance.now()}});
-document.body.addEventListener('pointerup',e=>{
- if(!swipeStart||state!=='playing')return;const dx=e.clientX-swipeStart.x,dy=e.clientY-swipeStart.y,ax=Math.abs(dx),ay=Math.abs(dy);
- if(Math.max(ax,ay)<22){jump()}else if(ax>ay){move(dx>0?1:-1)}else{dy<0?jump():slide()}swipeStart=null
-});
+document.body.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;swipeStart={x:e.clientX,y:e.clientY}});
+document.body.addEventListener('pointerup',e=>{if(!swipeStart||state!=='playing')return;const dx=e.clientX-swipeStart.x,dy=e.clientY-swipeStart.y,ax=Math.abs(dx),ay=Math.abs(dy);
+ if(Math.max(ax,ay)<20)jump();else if(ax>ay)move(dx>0?1:-1);else(dy<0?jump():slide());swipeStart=null});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&state==='playing')pause()});
 if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
