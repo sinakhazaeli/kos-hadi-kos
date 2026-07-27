@@ -1,16 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#62c3ef"/><stop offset=".7" stop-color="#f8d6a4"/><stop offset="1" stop-color="#e9ad67"/></linearGradient></defs>
-<rect width="512" height="512" rx="112" fill="url(#g)"/>
-<circle cx="400" cy="100" r="44" fill="#ffd55c"/>
-<path d="M44 392h424v78H44z" fill="#3f4953"/>
-<path d="M90 392V244h62v148M350 392V210h50v182" fill="#8e7c70"/>
-<path d="M75 244h92l-46-62zM335 210h80l-40-64z" fill="#8e7c70"/>
-<path d="M140 198h230" stroke="#f4f6f7" stroke-width="8"/>
-<path d="M165 148v102M345 148v102" stroke="#e3e8eb" stroke-width="11"/>
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#5fc1ee"/><stop offset=".7" stop-color="#f7d8aa"/><stop offset="1" stop-color="#eab26f"/></linearGradient></defs>
+<rect width="512" height="512" rx="110" fill="url(#g)"/>
+<circle cx="401" cy="100" r="45" fill="#ffdf77"/>
+<path d="M44 392h424v80H44z" fill="#4d5359"/>
+<path d="M91 392V245h62v147M350 392V211h51v181" fill="#8d7a6f"/>
+<path d="M76 245h92l-46-62zM335 211h81l-40-65z" fill="#8d7a6f"/>
+<path d="M140 199h231" stroke="#eff3f5" stroke-width="8"/>
+<path d="M165 149v102M345 149v102" stroke="#e1e7ea" stroke-width="11"/>
 <circle cx="252" cy="170" r="41" fill="#efbe94"/>
 <rect x="207" y="205" width="90" height="110" rx="28" fill="#e95f36"/>
 <path d="M228 310l-48 91M275 310l60 88" stroke="#17364b" stroke-width="28" stroke-linecap="round"/>
 <path d="M209 235l-62 55M296 235l60 48" stroke="#efbe94" stroke-width="24" stroke-linecap="round"/>
 <rect x="216" y="121" width="73" height="24" rx="10" fill="#b92f2f"/>
-<text x="256" y="462" text-anchor="middle" font-size="56" font-weight="900" fill="#fff" font-family="Arial">KOŞ!</text>
+<text x="256" y="462" text-anchor="middle" font-size="54" font-weight="900" fill="#fff" font-family="Arial">KOŞ!</text>
 </svg>
