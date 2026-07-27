@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Koş Hadi Koş!</title>
+<style>
+body{margin:0;font-family:Arial;background:#87CEEB;overflow:hidden}
+#ui{position:absolute;top:10px;left:10px;color:#fff;font-size:22px;font-weight:bold}
+#msg{position:absolute;top:45px;left:10px;color:#fff}
+canvas{display:block}
+button{position:absolute;right:10px;top:10px}
+</style>
+</head>
+<body>
+<div id="ui">Score: <span id="s">0</span></div>
+<div id="msg">Tap to Jump</div>
+<button onclick="lang=lang==='en'?'tr':'en';update()">🌐</button>
+<canvas id="c"></canvas>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+function rs(){cv.width=innerWidth;cv.height=innerHeight;}rs();onresize=rs;
+let y=0,v=0,g=0.8,ground=120,obsX=500,score=0,lang='en',alive=true;
+const t={en:{tap:"Tap to Jump",hit:"Game Over - tap to restart"},
+tr:{tap:"Zıplamak için dokun",hit:"Oyun Bitti - tekrar dokun"}};
+function update(){msg.innerText=alive?t[lang].tap:t[lang].hit;}
+update();
+onclick=()=>{if(!alive){alive=true;score=0;obsX=cv.width+100;y=0;v=0;}
+if(y==0)v=-15;}
+function loop(){
+ctx.fillStyle="#87CEEB";ctx.fillRect(0,0,cv.width,cv.height);
+ctx.fillStyle="#3a3";ctx.fillRect(0,cv.height-ground,cv.width,ground);
+if(alive){
+v+=g;y+=v;if(y>0){y=0;v=0;}
+obsX-=6;if(obsX<-40){obsX=cv.width+Math.random()*200;score++;s.textContent=score;}
+if(obsX<90&&obsX>40&&y>-50){alive=false;update();}
+}
+ctx.fillStyle="orange";ctx.fillRect(60,cv.height-ground-50+y,40,50);
+ctx.fillStyle="red";ctx.fillRect(obsX,cv.height-ground-40,30,40);
+requestAnimationFrame(loop);}
+loop();
+</script>
+</body>
+</html>
