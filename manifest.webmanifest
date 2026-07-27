@@ -3,8 +3,8 @@
   "short_name": "Koş Hadi Koş",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#75c9f2",
-  "theme_color": "#12334a",
+  "background_color": "#7ed0f3",
+  "theme_color": "#102d42",
   "orientation": "portrait",
   "icons": [
     {
