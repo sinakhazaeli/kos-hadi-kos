@@ -1,0 +1,10 @@
+{
+  "name": "Koş Hadi Koş!",
+  "short_name": "Koş Hadi Koş",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#8ed6ff",
+  "theme_color": "#15324b",
+  "orientation": "portrait",
+  "icons": []
+}

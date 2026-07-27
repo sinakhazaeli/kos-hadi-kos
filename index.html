@@ -1,44 +1,326 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+<meta name="theme-color" content="#15324b" />
+<link rel="manifest" href="manifest.webmanifest" />
 <title>Koş Hadi Koş!</title>
 <style>
-body{margin:0;font-family:Arial;background:#87CEEB;overflow:hidden}
-#ui{position:absolute;top:10px;left:10px;color:#fff;font-size:22px;font-weight:bold}
-#msg{position:absolute;top:45px;left:10px;color:#fff}
-canvas{display:block}
-button{position:absolute;right:10px;top:10px}
+:root{
+  --sky1:#8ed6ff;
+  --sky2:#eaf9ff;
+  --ground:#d9b16f;
+  --dark:#15324b;
+  --accent:#f5a623;
+  --panel:rgba(255,255,255,.92);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:linear-gradient(var(--sky1),var(--sky2));touch-action:manipulation}
+body{position:fixed;inset:0}
+canvas{display:block;width:100vw;height:100vh}
+#topbar{
+  position:fixed;top:max(10px,env(safe-area-inset-top));left:12px;right:12px;
+  display:flex;justify-content:space-between;align-items:center;z-index:5;pointer-events:none
+}
+.pill{
+  background:rgba(21,50,75,.86);color:white;padding:9px 13px;border-radius:18px;
+  font-weight:800;box-shadow:0 4px 12px rgba(0,0,0,.15);backdrop-filter:blur(8px)
+}
+#actions{display:flex;gap:8px;pointer-events:auto}
+.iconbtn{
+  border:0;background:rgba(255,255,255,.93);width:44px;height:44px;border-radius:14px;
+  font-size:20px;box-shadow:0 4px 12px rgba(0,0,0,.15)
+}
+#centerPanel{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:24px;z-index:4;pointer-events:none
+}
+.card{
+  width:min(360px,92vw);background:var(--panel);border-radius:28px;padding:26px;
+  text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.22);pointer-events:auto
+}
+h1{margin:0 0 8px;font-size:35px;color:var(--dark);line-height:1}
+.subtitle{margin:0 0 18px;color:#496477;font-weight:600}
+.bigbtn{
+  width:100%;border:0;border-radius:18px;padding:15px 18px;font-size:19px;font-weight:900;
+  background:var(--accent);color:#402500;box-shadow:0 7px 0 #c87800;margin-top:8px
+}
+.bigbtn:active{transform:translateY(3px);box-shadow:0 4px 0 #c87800}
+.smallrow{display:flex;gap:10px;margin-top:12px}
+.smallbtn{
+  flex:1;border:0;border-radius:15px;padding:12px 8px;background:#eef4f7;color:var(--dark);font-weight:800
+}
+.hidden{display:none!important}
+#tip{
+  position:fixed;bottom:calc(22px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);
+  background:rgba(21,50,75,.84);color:white;padding:10px 16px;border-radius:18px;
+  font-weight:700;z-index:3;white-space:nowrap
+}
+#toast{
+  position:fixed;top:90px;left:50%;transform:translateX(-50%);
+  background:#fff;color:var(--dark);padding:9px 14px;border-radius:16px;font-weight:800;
+  box-shadow:0 6px 20px rgba(0,0,0,.18);opacity:0;transition:.2s;z-index:6
+}
+#toast.show{opacity:1}
 </style>
 </head>
 <body>
-<div id="ui">Score: <span id="s">0</span></div>
-<div id="msg">Tap to Jump</div>
-<button onclick="lang=lang==='en'?'tr':'en';update()">🌐</button>
-<canvas id="c"></canvas>
+<div id="topbar">
+  <div class="pill"><span id="scoreLabel">Skor</span>: <span id="score">0</span> · <span id="bestLabel">En İyi</span>: <span id="best">0</span></div>
+  <div id="actions">
+    <button class="iconbtn" id="soundBtn" aria-label="Sound">🔊</button>
+    <button class="iconbtn" id="langBtn" aria-label="Language">🌐</button>
+    <button class="iconbtn" id="pauseBtn" aria-label="Pause">⏸️</button>
+  </div>
+</div>
+
+<div id="centerPanel">
+  <div class="card" id="menuCard">
+    <div style="font-size:54px">🏃‍♂️</div>
+    <h1>KOŞ HADİ KOŞ!</h1>
+    <p class="subtitle" id="subtitle">İstanbul sokaklarında engelleri aş!</p>
+    <button class="bigbtn" id="playBtn">OYNA</button>
+    <div class="smallrow">
+      <button class="smallbtn" id="howBtn">Nasıl Oynanır?</button>
+      <button class="smallbtn" id="resetBtn">Skoru Sıfırla</button>
+    </div>
+  </div>
+
+  <div class="card hidden" id="gameOverCard">
+    <div style="font-size:52px">😵</div>
+    <h1 id="gameOverTitle">EYVAH!</h1>
+    <p class="subtitle"><span id="finalLabel">Skorun</span>: <b id="finalScore">0</b></p>
+    <button class="bigbtn" id="restartBtn">TEKRAR OYNA</button>
+    <button class="smallbtn" id="homeBtn" style="width:100%;margin-top:14px">ANA MENÜ</button>
+  </div>
+
+  <div class="card hidden" id="pauseCard">
+    <div style="font-size:48px">⏸️</div>
+    <h1 id="pauseTitle">DURAKLATILDI</h1>
+    <button class="bigbtn" id="resumeBtn">DEVAM ET</button>
+  </div>
+</div>
+
+<div id="tip">Zıplamak için ekrana dokun</div>
+<div id="toast"></div>
+<canvas id="game"></canvas>
+
 <script>
-const cv=document.getElementById('c'),ctx=cv.getContext('2d');
-function rs(){cv.width=innerWidth;cv.height=innerHeight;}rs();onresize=rs;
-let y=0,v=0,g=0.8,ground=120,obsX=500,score=0,lang='en',alive=true;
-const t={en:{tap:"Tap to Jump",hit:"Game Over - tap to restart"},
-tr:{tap:"Zıplamak için dokun",hit:"Oyun Bitti - tekrar dokun"}};
-function update(){msg.innerText=alive?t[lang].tap:t[lang].hit;}
-update();
-onclick=()=>{if(!alive){alive=true;score=0;obsX=cv.width+100;y=0;v=0;}
-if(y==0)v=-15;}
-function loop(){
-ctx.fillStyle="#87CEEB";ctx.fillRect(0,0,cv.width,cv.height);
-ctx.fillStyle="#3a3";ctx.fillRect(0,cv.height-ground,cv.width,ground);
-if(alive){
-v+=g;y+=v;if(y>0){y=0;v=0;}
-obsX-=6;if(obsX<-40){obsX=cv.width+Math.random()*200;score++;s.textContent=score;}
-if(obsX<90&&obsX>40&&y>-50){alive=false;update();}
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const $ = id => document.getElementById(id);
+
+const UI = {
+  score:$('score'), best:$('best'), scoreLabel:$('scoreLabel'), bestLabel:$('bestLabel'),
+  langBtn:$('langBtn'), soundBtn:$('soundBtn'), pauseBtn:$('pauseBtn'),
+  menuCard:$('menuCard'), gameOverCard:$('gameOverCard'), pauseCard:$('pauseCard'),
+  playBtn:$('playBtn'), restartBtn:$('restartBtn'), resumeBtn:$('resumeBtn'), homeBtn:$('homeBtn'),
+  howBtn:$('howBtn'), resetBtn:$('resetBtn'), tip:$('tip'), subtitle:$('subtitle'),
+  finalScore:$('finalScore'), finalLabel:$('finalLabel'), gameOverTitle:$('gameOverTitle'),
+  pauseTitle:$('pauseTitle'), toast:$('toast')
+};
+
+const TXT = {
+  tr:{
+    score:'Skor',best:'En İyi',subtitle:'İstanbul sokaklarında engelleri aş!',
+    play:'OYNA',how:'Nasıl Oynanır?',reset:'Skoru Sıfırla',tip:'Zıplamak için ekrana dokun',
+    over:'EYVAH!',final:'Skorun',again:'TEKRAR OYNA',home:'ANA MENÜ',
+    paused:'DURAKLATILDI',resume:'DEVAM ET',
+    howmsg:'Ekrana dokun: zıpla. Çay, simit ve martılardan kaç!'
+  },
+  en:{
+    score:'Score',best:'Best',subtitle:'Dodge obstacles in the streets of Istanbul!',
+    play:'PLAY',how:'How to Play',reset:'Reset Score',tip:'Tap the screen to jump',
+    over:'OH NO!',final:'Your Score',again:'PLAY AGAIN',home:'MAIN MENU',
+    paused:'PAUSED',resume:'RESUME',
+    howmsg:'Tap the screen to jump. Avoid tea, simit carts and seagulls!'
+  }
+};
+
+let lang = localStorage.getItem('khk_lang') || 'tr';
+let soundOn = localStorage.getItem('khk_sound') !== 'off';
+let best = Number(localStorage.getItem('khk_best') || 0);
+let state = 'menu';
+let score = 0;
+let speed = 6;
+let worldTime = 0;
+let lastTime = performance.now();
+let audioCtx;
+
+const player = {x:72,y:0,w:40,h:54,vy:0,onGround:true};
+const obstacles = [];
+const clouds = [{x:50,y:120,s:1},{x:260,y:80,s:.7},{x:520,y:150,s:.9}];
+
+function resize(){
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  canvas.width = innerWidth*dpr;
+  canvas.height = innerHeight*dpr;
+  canvas.style.width = innerWidth+'px';
+  canvas.style.height = innerHeight+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
 }
-ctx.fillStyle="orange";ctx.fillRect(60,cv.height-ground-50+y,40,50);
-ctx.fillStyle="red";ctx.fillRect(obsX,cv.height-ground-40,30,40);
-requestAnimationFrame(loop);}
-loop();
+addEventListener('resize',resize); resize();
+
+function t(k){return TXT[lang][k]}
+function refreshText(){
+  UI.scoreLabel.textContent=t('score'); UI.bestLabel.textContent=t('best');
+  UI.subtitle.textContent=t('subtitle'); UI.playBtn.textContent=t('play');
+  UI.howBtn.textContent=t('how'); UI.resetBtn.textContent=t('reset'); UI.tip.textContent=t('tip');
+  UI.gameOverTitle.textContent=t('over'); UI.finalLabel.textContent=t('final');
+  UI.restartBtn.textContent=t('again'); UI.homeBtn.textContent=t('home');
+  UI.pauseTitle.textContent=t('paused'); UI.resumeBtn.textContent=t('resume');
+  UI.best.textContent=best; UI.soundBtn.textContent=soundOn?'🔊':'🔇';
+  localStorage.setItem('khk_lang',lang);
+}
+refreshText();
+
+function beep(freq=440,dur=.08,type='sine',vol=.06){
+  if(!soundOn) return;
+  audioCtx ||= new (window.AudioContext||window.webkitAudioContext)();
+  const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+  o.type=type;o.frequency.value=freq;g.gain.value=vol;
+  o.connect(g);g.connect(audioCtx.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+dur);o.stop(audioCtx.currentTime+dur);
+}
+
+function toast(msg){
+  UI.toast.textContent=msg; UI.toast.classList.add('show');
+  clearTimeout(toast.timer); toast.timer=setTimeout(()=>UI.toast.classList.remove('show'),1700);
+}
+
+function hideCards(){UI.menuCard.classList.add('hidden');UI.gameOverCard.classList.add('hidden');UI.pauseCard.classList.add('hidden')}
+function showCard(card){hideCards();card.classList.remove('hidden')}
+function startGame(){
+  hideCards(); state='playing'; score=0; speed=6; worldTime=0; obstacles.length=0;
+  player.y=0; player.vy=0; player.onGround=true; spawnObstacle(innerWidth+180);
+  UI.score.textContent='0'; UI.tip.classList.remove('hidden'); beep(620,.07,'square');
+}
+function endGame(){
+  state='over'; beep(160,.28,'sawtooth',.05);
+  if(score>best){best=score;localStorage.setItem('khk_best',best);UI.best.textContent=best}
+  UI.finalScore.textContent=score; showCard(UI.gameOverCard); UI.tip.classList.add('hidden');
+}
+function pauseGame(){
+  if(state==='playing'){state='paused';showCard(UI.pauseCard);UI.tip.classList.add('hidden')}
+  else if(state==='paused'){state='playing';hideCards();UI.tip.classList.remove('hidden')}
+}
+function jump(){
+  if(state==='playing' && player.onGround){
+    player.vy=-15.5;player.onGround=false;beep(520,.07,'square');
+  }
+}
+function spawnObstacle(x){
+  const types=['tea','cart','cat','seagull'];
+  const type=types[Math.floor(Math.random()*types.length)];
+  obstacles.push({x:x||innerWidth+60,type,w:type==='cart'?55:36,h:type==='seagull'?30:42,yOffset:type==='seagull'?72:0});
+}
+function roundedRect(x,y,w,h,r,fill){
+  ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=fill;ctx.fill();
+}
+
+function drawScene(){
+  const W=innerWidth,H=innerHeight,groundY=H-120;
+  const grad=ctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,'#88d3ff');grad.addColorStop(.65,'#dff7ff');grad.addColorStop(1,'#f7d8a5');
+  ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+
+  // sun
+  ctx.fillStyle='#ffd45a';ctx.beginPath();ctx.arc(W-70,90,34,0,Math.PI*2);ctx.fill();
+
+  // clouds
+  ctx.fillStyle='rgba(255,255,255,.8)';
+  clouds.forEach(c=>{
+    const x=((c.x-worldTime*.1)%(W+180)+W+180)%(W+180)-90;
+    ctx.beginPath();ctx.arc(x,c.y,25*c.s,0,7);ctx.arc(x+25*c.s,c.y-10*c.s,22*c.s,0,7);ctx.arc(x+48*c.s,c.y,25*c.s,0,7);ctx.fill();
+  });
+
+  // skyline
+  ctx.fillStyle='#b79b86';
+  for(let x=-((worldTime*.35)%90)-20;x<W+90;x+=90){
+    ctx.fillRect(x,groundY-120,58,120);
+    ctx.fillRect(x+18,groundY-150,22,30);
+    ctx.fillStyle='#d8c0a9';ctx.fillRect(x+8,groundY-92,12,18);ctx.fillRect(x+34,groundY-92,12,18);ctx.fillStyle='#b79b86';
+  }
+  // ground
+  ctx.fillStyle='#c88743';ctx.fillRect(0,groundY,W,120);
+  ctx.fillStyle='#e9bd79';ctx.fillRect(0,groundY,W,24);
+  for(let x=-((worldTime*speed)%42);x<W;x+=42){ctx.fillStyle='rgba(110,61,31,.16)';ctx.fillRect(x,groundY+30,2,90)}
+
+  // player shadow
+  ctx.fillStyle='rgba(0,0,0,.18)';ctx.beginPath();ctx.ellipse(player.x+20,groundY+8,24,7,0,0,7);ctx.fill();
+  // player
+  const py=groundY-player.h+player.y;
+  roundedRect(player.x+8,py+10,25,33,8,'#f5a623');
+  ctx.fillStyle='#f0c39b';ctx.beginPath();ctx.arc(player.x+21,py+8,12,0,7);ctx.fill();
+  ctx.fillStyle='#2c3e50';ctx.fillRect(player.x+11,py-2,21,7);
+  ctx.fillStyle='#15324b';ctx.fillRect(player.x+9,py+42,9,12);ctx.fillRect(player.x+25,py+42,9,12);
+  ctx.fillStyle='#111';ctx.fillRect(player.x+25,py+7,2,2);
+
+  obstacles.forEach(o=>{
+    const y=groundY-o.h-o.yOffset;
+    if(o.type==='tea'){
+      ctx.fillStyle='#8a4d25';ctx.fillRect(o.x+10,y+10,16,25);
+      ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(o.x+18,y+6,11,0,7);ctx.fill();
+      ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.strokeRect(o.x+24,y+7,8,10);
+    } else if(o.type==='cart'){
+      roundedRect(o.x,y+7,55,30,6,'#d6453d');ctx.fillStyle='#f0c94d';ctx.fillRect(o.x+7,y,41,13);
+      ctx.fillStyle='#222';ctx.beginPath();ctx.arc(o.x+12,y+40,7,0,7);ctx.arc(o.x+44,y+40,7,0,7);ctx.fill();
+    } else if(o.type==='cat'){
+      ctx.fillStyle='#777';ctx.beginPath();ctx.arc(o.x+18,y+17,13,0,7);ctx.fill();ctx.fillRect(o.x+10,y+20,20,19);
+      ctx.beginPath();ctx.moveTo(o.x+8,y+9);ctx.lineTo(o.x+13,y);ctx.lineTo(o.x+17,y+10);ctx.fill();
+    } else {
+      ctx.fillStyle='#f7f7f7';ctx.beginPath();ctx.ellipse(o.x+18,y+15,17,10,0,0,7);ctx.fill();
+      ctx.fillStyle='#ffb000';ctx.fillRect(o.x+32,y+14,9,3);
+    }
+  });
+}
+
+function update(dt){
+  if(state!=='playing') return;
+  worldTime += dt*.06;
+  speed = Math.min(10,6+score*.08);
+  player.vy += .82*(dt/16.67);
+  player.y += player.vy*(dt/16.67);
+  if(player.y>0){player.y=0;player.vy=0;player.onGround=true}
+  for(const o of obstacles)o.x -= speed*(dt/16.67);
+  if(obstacles.length===0 || obstacles[obstacles.length-1].x < innerWidth-260-Math.random()*180)spawnObstacle();
+  if(obstacles[0]?.x < -80){obstacles.shift();score++;UI.score.textContent=score;if(score%5===0)beep(760,.05,'square')}
+  const px=player.x+7, py=innerHeight-120-player.h+player.y+5, pw=28, ph=player.h-5;
+  for(const o of obstacles){
+    const oy=innerHeight-120-o.h-o.yOffset;
+    if(px < o.x+o.w-4 && px+pw > o.x+4 && py < oy+o.h && py+ph > oy+4){endGame();break}
+  }
+}
+
+function loop(now){
+  const dt=Math.min(34,now-lastTime);lastTime=now;
+  update(dt);drawScene();requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+// Important: UI controls stop propagation so they do not jump/restart the game.
+['langBtn','soundBtn','pauseBtn','playBtn','restartBtn','resumeBtn','homeBtn','howBtn','resetBtn'].forEach(id=>{
+  $(id).addEventListener('pointerdown',e=>e.stopPropagation());
+  $(id).addEventListener('click',e=>e.stopPropagation());
+});
+
+UI.langBtn.onclick=()=>{lang=lang==='tr'?'en':'tr';refreshText();beep(660,.05,'square')};
+UI.soundBtn.onclick=()=>{soundOn=!soundOn;localStorage.setItem('khk_sound',soundOn?'on':'off');refreshText();if(soundOn)beep(600,.07,'square')};
+UI.pauseBtn.onclick=()=>pauseGame();
+UI.playBtn.onclick=()=>startGame();
+UI.restartBtn.onclick=()=>startGame();
+UI.resumeBtn.onclick=()=>pauseGame();
+UI.homeBtn.onclick=()=>{state='menu';showCard(UI.menuCard);UI.tip.classList.add('hidden')};
+UI.howBtn.onclick=()=>toast(t('howmsg'));
+UI.resetBtn.onclick=()=>{best=0;localStorage.setItem('khk_best','0');refreshText();toast(lang==='tr'?'Skor sıfırlandı':'Score reset')};
+
+document.body.addEventListener('pointerdown',e=>{
+  if(e.target.closest('button')) return;
+  if(state==='playing') jump();
+});
+
+document.addEventListener('visibilitychange',()=>{if(document.hidden && state==='playing')pauseGame()});
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
 </body>
 </html>
